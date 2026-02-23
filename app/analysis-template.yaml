@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: canary-success-rate
+  namespace: app
+spec:
+  metrics:
+    - name: success-rate
+      interval: 20s
+      count: 3                     # Run 3 measurements
+      successCondition: result[0] >= 0.95   # 95% success rate required
+      failureLimit: 1              # Fail after 1 bad measurement
+      provider:
+        prometheus:
+          address: http://kube-prom-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090
+          query: |
+            sum(rate(
+              http_server_requests_seconds_count{
+                namespace="app",
+                job="task-service-canary",
+                status=~"2.."
+              }[1m]
+            )) /
+            sum(rate(
+              http_server_requests_seconds_count{
+                namespace="app",
+                job="task-service-canary"
+              }[1m]
+            ))
