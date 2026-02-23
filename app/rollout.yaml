@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: task-service
-          image: task-service:v1       # ← Change this to trigger a canary
+          image: task-service:v2       # ← Change this to trigger a canary
           ports:
             - containerPort: 8080
           env:
@@ -42,7 +42,7 @@ spec:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
             - name: APP_VERSION
-              value: "v1"
+              value: "v2"
           readinessProbe:
             httpGet:
               path: /actuator/health
