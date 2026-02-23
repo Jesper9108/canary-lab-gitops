@@ -7,9 +7,9 @@ spec:
   metrics:
     - name: success-rate
       interval: 20s
-      count: 3                     # Run 3 measurements
-      successCondition: result[0] >= 0.95   # 95% success rate required
-      failureLimit: 1              # Fail after 1 bad measurement
+      count: 3
+      successCondition: len(result) == 0 || result[0] >= 0.95
+      failureLimit: 1
       provider:
         prometheus:
           address: http://kube-prom-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090

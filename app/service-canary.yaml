@@ -3,9 +3,12 @@ kind: Service
 metadata:
   name: task-service-canary
   namespace: app
+  labels:
+    app: task-service
 spec:
   selector:
     app: task-service
   ports:
-    - port: 80
+    - name: http
+      port: 80
       targetPort: 8080
